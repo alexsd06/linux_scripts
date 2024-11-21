@@ -1,0 +1,47 @@
+#!/usr/bin/python3
+import os
+import sys
+import time 
+
+input_time = sys.argv[1]
+input_time = input_time.split(':')
+
+timer=0
+
+if len(input_time)==0 or len(input_time)>3:
+    print ("Wrong arguments!")
+    print ('Run the program like: "countdown %H:%M:%S"')
+    print ('You can omit %H and/or %M')
+    sys.exit(0)
+
+idx = len (input_time) - 1
+cnt = 0
+while idx>=0:
+    timer += int(input_time[idx])*pow(60, cnt)
+    idx -= 1
+    cnt += 1
+
+def get_hour(timer):
+    return int(timer/3600)
+def get_minute(timer):
+    return int((timer-3600*get_hour(timer))/60)
+def get_second(timer):
+    return int((timer-3600*get_hour(timer))-60*get_minute(timer))
+
+def prettify (timer):
+    time_str = str(timer)
+    if timer<10:
+        time_str = '0' + time_str
+    return time_str
+
+def print_time_remaining(timer):
+    time_str = f'Time left: {prettify(get_hour(timer))}:{prettify(get_minute(timer))}:{prettify(get_second(timer))}...'
+    print (time_str, "\r", end="")
+    return len(time_str)
+
+while timer:
+    cnt = print_time_remaining(timer)
+    time.sleep(1)
+    timer-=1
+
+print ('Timer finished!            ')
